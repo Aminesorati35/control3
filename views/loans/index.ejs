@@ -1,0 +1,55 @@
+<h1>Book Loans</h1>
+<div class="mb-3">
+  <a href="/loans/new" class="btn btn-success">Issue New Book</a>
+</div>
+
+<% if (loans.length > 0) { %>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Book Title</th>
+          <th>Student Name</th>
+          <th>Issue Date</th>
+          <th>Due Date</th>
+          <th>Return Date</th>
+          <th>Status</th>
+          <th>Fine</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% loans.forEach(loan => { %>
+            <tr>
+              <td><%= loan.book ? loan.book.title : 'Unknown Book' %></td>
+              <td><%= loan.student ? loan.student.name : 'Unknown Student' %></td>
+              <td><%= loan.issueDate.toLocaleDateString() %></td>
+              <td><%= loan.dueDate.toLocaleDateString() %></td>
+              <td><%= loan.returnDate ? loan.returnDate.toLocaleDateString() : 'Not returned' %></td>
+              <td>
+                <% if (loan.status === 'issued') { %>
+                  <span class="badge bg-primary">Issued</span>
+                <% } else if (loan.status === 'returned') { %>
+                  <span class="badge bg-success">Returned</span>
+                <% } else if (loan.status === 'overdue') { %>
+                  <span class="badge bg-danger">Overdue</span>
+                <% } %>
+              </td>
+              <td>$<%= loan.fineAmount.toFixed(2) %></td>
+              <td>
+                <% if (loan.status !== 'returned') { %>
+                  <form action="/loans/<%= loan._id %>/return" method="POST">
+                    <button type="submit" class="btn btn-sm btn-info">Return Book</button>
+                  </form>
+                <% } else { %>
+                  <span class="text-muted">Returned</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="alert alert-info">No book loans found.</div>
+<% } %>

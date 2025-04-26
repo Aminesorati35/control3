@@ -1,0 +1,45 @@
+<h1>Issue New Book</h1>
+
+<div class="card">
+  <div class="card-body">
+    <% if (books.length === 0 || students.length === 0) { %>
+      <div class="alert alert-warning">
+        <% if (books.length === 0) { %>
+          No available books to issue. <a href="/books/new">Add books first</a>.
+        <% } %>
+        <% if (students.length === 0) { %>
+          No registered students. <a href="/students/new">Register students first</a>.
+        <% } %>
+      </div>
+    <% } else { %>
+      <form action="/loans" method="POST">
+        <div class="mb-3">
+          <label for="bookId" class="form-label">Select Book</label>
+          <select class="form-select" id="bookId" name="bookId" required>
+            <option value="">-- Select a book --</option>
+            <% books.forEach(book => { %>
+              <option value="<%= book._id %>"><%= book.title %> by <%= book.author %> (<%= book.availableQuantity %> available)</option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="studentId" class="form-label">Select Student</label>
+          <select class="form-select" id="studentId" name="studentId" required>
+            <option value="">-- Select a student --</option>
+            <% students.forEach(student => { %>
+              <option value="<%= student._id %>"><%= student.name %> (<%= student.studentId %>)</option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="dueDate" class="form-label">Due Date</label>
+          <input type="date" class="form-control" id="dueDate" name="dueDate" required>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Issue Book</button>
+          <a href="/loans" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<h1>Students Collection</h1>
+<div class="mb-3">
+  <a href="/students/new" class="btn btn-success">Register New Student</a>
+</div>
+
+<% if (students.length > 0) { %>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Student ID</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% students.forEach(student => { %>
+          <tr>
+            <td><%= student.name %></td>
+            <td><%= student.studentId %></td>
+            <td><%= student.email %></td>
+            <td><%= student.phone %></td>
+            <td>
+              <a href="/students/<%= student._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+              <form action="/students/<%= student._id %>?_method=DELETE" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="alert alert-info">No students registered.</div>
+<% } %>

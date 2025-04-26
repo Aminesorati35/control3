@@ -1,0 +1,42 @@
+<h1>Books Collection</h1>
+<div class="mb-3">
+  <a href="/books/new" class="btn btn-success">Add New Book</a>
+</div>
+
+<% if (books.length > 0) { %>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Total Quantity</th>
+          <th>Available</th>
+          <th>Genre</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% books.forEach(book => { %>
+          <tr>
+            <td><%= book.title %></td>
+            <td><%= book.author %></td>
+            <td><%= book.isbn %></td>
+            <td><%= book.quantity %></td>
+            <td><%= book.availableQuantity %></td>
+            <td><%= book.genre %></td>
+            <td>
+              <a href="/books/<%= book._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+              <form action="/books/<%= book._id %>?_method=DELETE" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="alert alert-info">No books found in the library.</div>
+<% } %>

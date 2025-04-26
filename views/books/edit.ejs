@@ -1,0 +1,36 @@
+<h1>Edit Book</h1>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/books/<%= book._id %>?_method=PUT" method="POST">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="<%= book.title %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="author" class="form-label">Author</label>
+        <input type="text" class="form-control" id="author" name="author" value="<%= book.author %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="isbn" class="form-label">ISBN</label>
+        <input type="text" class="form-control" id="isbn" name="isbn" value="<%= book.isbn %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="<%= book.quantity %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="publicationYear" class="form-label">Publication Year</label>
+        <input type="number" class="form-control" id="publicationYear" name="publicationYear" value="<%= book.publicationYear %>">
+      </div>
+      <div class="mb-3">
+        <label for="genre" class="form-label">Genre</label>
+        <input type="text" class="form-control" id="genre" name="genre" value="<%= book.genre %>">
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary">Update Book</button>
+        <a href="/books" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>

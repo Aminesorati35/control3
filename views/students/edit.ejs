@@ -1,0 +1,32 @@
+<h1>Edit Student</h1>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/students/<%= student._id %>?_method=PUT" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="<%= student.name %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="<%= student.email %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="studentId" class="form-label">Student ID</label>
+        <input type="text" class="form-control" id="studentId" name="studentId" value="<%= student.studentId %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="text" class="form-control" id="phone" name="phone" value="<%= student.phone %>">
+      </div>
+      <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+        <textarea class="form-control" id="address" name="address" rows="3"><%= student.address %></textarea>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary">Update Student</button>
+        <a href="/students" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
