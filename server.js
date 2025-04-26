@@ -80,6 +80,10 @@ app.use(session({
   saveUninitialized: false,
   cookie: { maxAge: 3600000 } // 1 hour
 }));
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
 
 // Authentication routes (accessible without authentication)
 app.use('/', authRoutes);
