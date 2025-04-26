@@ -4,11 +4,14 @@ const mongoose = require('mongoose');
 const path = require('path');
 const methodOverride = require('method-override');
 const expressLayouts = require('express-ejs-layouts');
+const session = require('express-session');
 
 // Import routes and models
+const authRoutes = require('./routes/authRoutes');
 const booksRoutes = require('./routes/books');
 const studentsRoutes = require('./routes/students');
 const loansRoutes = require('./routes/loans');
+const isAuthenticated = require('./middleware/auth');
 const Book = require('./models/Book'); // Required for test-query
 
 const app = express();
@@ -70,7 +73,18 @@ app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Routes
+// Session middleware
+app.use(session({
+  secret: 'library-management-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 3600000 } // 1 hour
+}));
+
+// Authentication routes (accessible without authentication)
+app.use('/', authRoutes);
+
+// Test routes (unprotected)
 app.get('/testdb', async (req, res) => {
   try {
     await mongoose.connection.db.admin().ping();
@@ -98,24 +112,35 @@ app.get('/test-query', async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
+// Protected root route
+app.get('/', isAuthenticated, (req, res) => {
   res.render('index', { 
     title: 'Library Management System',
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    user: req.session.user
   });
 });
 
-// Apply routes
-app.use('/books', booksRoutes);
-app.use('/students', studentsRoutes);
-app.use('/loans', loansRoutes);
+// Protected routes
+app.use('/books', isAuthenticated, booksRoutes);
+app.use('/students', isAuthenticated, studentsRoutes);
+app.use('/loans', isAuthenticated, loansRoutes);
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).render('404', { 
+    title: 'Page Not Found',
+    user: req.session.user
+  });
+});
 
 // Error handler
 app.use((err, req, res, next) => {
   console.error('🔥 Server Error:', err.stack);
   res.status(500).render('error', {
     title: 'Server Error',
-    error: process.env.NODE_ENV === 'development' ? err : null
+    error: process.env.NODE_ENV === 'development' ? err : null,
+    user: req.session.user
   });
 });
 
